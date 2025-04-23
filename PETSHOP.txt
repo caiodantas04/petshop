@@ -1,0 +1,619 @@
+html
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetSchedule - Agendamento de Banho</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>PetSchedule</h1>
+      <div class="auth-buttons">
+        <button id="loginBtn">Login</button>
+        <button id="registerBtn">Registrar</button>
+        <button id="logoutBtn" style="display:none;">Sair</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="auth-forms" style="display:none;">
+        <!-- Formulário de Login -->
+        <div id="loginForm" class="form-container">
+          <h2>Login</h2>
+          <form>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input type="password" id="password" required>
+            </div>
+            <button type="submit">Entrar</button>
+            <button type="button" class="switch-form">Criar conta</button>
+          </form>
+        </div>
+
+        <!-- Formulário de Registro -->
+        <div id="registerForm" class="form-container" style="display:none;">
+          <h2>Criar Conta</h2>
+          <form>
+            <div class="form-group">
+              <label for="regName">Nome</label>
+              <input type="text" id="regName" required>
+            </div>
+            <div class="form-group">
+              <label for="regEmail">E-mail</label>
+              <input type="email" id="regEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="regPhone">Telefone</label>
+              <input type="tel" id="regPhone" required>
+            </div>
+            <div class="form-group">
+              <label for="regPassword">Senha</label>
+              <input type="password" id="regPassword" required>
+            </div>
+            <div class="form-group">
+              <label for="regConfirmPassword">Confirmar Senha</label>
+              <input type="password" id="regConfirmPassword" required>
+            </div>
+            <button type="submit">Registrar</button>
+            <button type="button" class="switch-form">Já tem conta? Login</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="dashboard" style="display:none;">
+        <section class="pets-section">
+          <h2>Meus Pets</h2>
+          <button id="addPetBtn">Adicionar Pet</button>
+          <div class="pets-grid" id="petsGrid">
+            <!-- Pets serão carregados aqui via JavaScript -->
+          </div>
+        </section>
+
+        <section class="schedule-section">
+          <h2>Agendar Banho</h2>
+          <form id="scheduleForm">
+            <div class="form-group">
+              <label for="petSelect">Selecione o Pet</label>
+              <select id="petSelect" required>
+                <option value="">-- Selecione --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="serviceType">Tipo de Serviço</label>
+              <select id="serviceType" required>
+                <option value="Banho">Banho</option>
+                <option value="Banho e Tosa">Banho e Tosa</option>
+                <option value="Tosa Higiênica">Tosa Higiênica</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="scheduleDate">Data e Hora</label>
+              <input type="datetime-local" id="scheduleDate" required>
+            </div>
+            <div class="form-group">
+              <label for="notes">Observações</label>
+              <textarea id="notes" rows="4"></textarea>
+            </div>
+            <button type="submit">Agendar</button>
+          </form>
+        </section>
+
+        <section class="appointments-section">
+          <h2>Meus Agendamentos</h2>
+          <div id="appointmentsList">
+            <!-- Agendamentos serão carregados aqui -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Modal para adicionar pet -->
+      <div id="petModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Adicionar Novo Pet</h2>
+          <form id="petForm">
+            <div class="form-group">
+              <label for="petName">Nome</label>
+              <input type="text" id="petName" required>
+            </div>
+            <div class="form-group">
+              <label for="petSpecies">Espécie</label>
+              <select id="petSpecies" required>
+                <option value="Cachorro">Cachorro</option>
+                <option value="Gato">Gato</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="petBreed">Raça</label>
+              <input type="text" id="petBreed">
+            </div>
+            <div class="form-group">
+              <label for="petAge">Idade (anos)</label>
+              <input type="number" id="petAge" min="0">
+            </div>
+            <div class="form-group">
+              <label for="petImage">Foto do Pet</label>
+              <input type="file" id="petImage" accept="image/*">
+            </div>
+            <button type="submit">Salvar</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+Css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+  }
+  
+  h1 {
+    color: #4a6fa5;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #4a6fa5;
+  }
+  
+  .auth-buttons button {
+    padding: 8px 16px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4a6fa5;
+    color: white;
+  }
+  
+  .form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 20px auto;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  button[type="submit"] {
+    background-color: #4a6fa5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #3a5a80;
+  }
+  
+  .switch-form {
+    background: none;
+    border: none;
+    color: #4a6fa5;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+  
+  .pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .pet-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pet-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  #addPetBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .appointment-card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .success {
+    color: green;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+javascript
+// Dados simulados (em uma aplicação real, isso viria de um backend)
+let users = [];
+let pets = [];
+let appointments = [];
+let currentUser = null;
+
+// Elementos do DOM
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const authForms = document.getElementById('auth-forms');
+const dashboard = document.getElementById('dashboard');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const petModal = document.getElementById('petModal');
+const closeModal = document.querySelector('.close');
+const addPetBtn = document.getElementById('addPetBtn');
+const petForm = document.getElementById('petForm');
+const petsGrid = document.getElementById('petsGrid');
+const petSelect = document.getElementById('petSelect');
+const scheduleForm = document.getElementById('scheduleForm');
+const appointmentsList = document.getElementById('appointmentsList');
+
+// Event Listeners
+loginBtn.addEventListener('click', () => showAuthForm('login'));
+registerBtn.addEventListener('click', () => showAuthForm('register'));
+logoutBtn.addEventListener('click', logout);
+closeModal.addEventListener('click', () => petModal.style.display = 'none');
+addPetBtn.addEventListener('click', () => petModal.style.display = 'block');
+window.addEventListener('click', (e) => {
+  if (e.target === petModal) petModal.style.display = 'none';
+});
+
+// Alternar entre formulários de login e registro
+document.querySelectorAll('.switch-form').forEach(button => {
+  button.addEventListener('click', () => {
+    if (loginForm.style.display === 'none') {
+      showAuthForm('login');
+    } else {
+      showAuthForm('register');
+    }
+  });
+});
+
+// Formulário de Login
+loginForm.querySelector('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  
+  const user = users.find(u => u.email === email && u.password === password);
+  
+  if (user) {
+    currentUser = user;
+    updateUI();
+    showMessage('Login realizado com sucesso!', 'success');
+  } else {
+    showMessage('E-mail ou senha incorretos', 'error');
+  }
+});
+
+// Formulário de Registro
+registerForm.querySelector('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('regName').value;
+  const email = document.getElementById('regEmail').value;
+  const phone = document.getElementById('regPhone').value;
+  const password = document.getElementById('regPassword').value;
+  const confirmPassword = document.getElementById('regConfirmPassword').value;
+  
+  if (password !== confirmPassword) {
+    showMessage('As senhas não coincidem', 'error');
+    return;
+  }
+  
+  if (users.some(u => u.email === email)) {
+    showMessage('E-mail já cadastrado', 'error');
+    return;
+  }
+  
+  const newUser = {
+    id: Date.now(),
+    name,
+    email,
+    phone,
+    password
+  };
+  
+  users.push(newUser);
+  currentUser = newUser;
+  updateUI();
+  showMessage('Conta criada com sucesso!', 'success');
+});
+
+// Formulário de Adicionar Pet
+petForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('petName').value;
+  const species = document.getElementById('petSpecies').value;
+  const breed = document.getElementById('petBreed').value;
+  const age = document.getElementById('petAge').value;
+  const imageFile = document.getElementById('petImage').files[0];
+  
+  let imageUrl = '';
+  if (imageFile) {
+    imageUrl = URL.createObjectURL(imageFile);
+  }
+  
+  const newPet = {
+    id: Date.now(),
+    ownerId: currentUser.id,
+    name,
+    species,
+    breed,
+    age,
+    imageUrl
+  };
+  
+  pets.push(newPet);
+  updatePetsList();
+  petModal.style.display = 'none';
+  petForm.reset();
+  showMessage('Pet adicionado com sucesso!', 'success');
+});
+
+// Formulário de Agendamento
+scheduleForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const petId = parseInt(document.getElementById('petSelect').value);
+  const serviceType = document.getElementById('serviceType').value;
+  const date = document.getElementById('scheduleDate').value;
+  const notes = document.getElementById('notes').value;
+  
+  const pet = pets.find(p => p.id === petId);
+  
+  if (!pet) {
+    showMessage('Selecione um pet válido', 'error');
+    return;
+  }
+  
+  const newAppointment = {
+    id: Date.now(),
+    userId: currentUser.id,
+    petId,
+    petName: pet.name,
+    serviceType,
+    date,
+    notes,
+    status: 'Agendado'
+  };
+  
+  appointments.push(newAppointment);
+  updateAppointmentsList();
+  scheduleForm.reset();
+  showMessage('Agendamento realizado com sucesso!', 'success');
+});
+
+// Funções auxiliares
+function showAuthForm(formType) {
+  authForms.style.display = 'block';
+  dashboard.style.display = 'none';
+  
+  if (formType === 'login') {
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+  } else {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+  }
+}
+
+function updateUI() {
+  if (currentUser) {
+    authForms.style.display = 'none';
+    dashboard.style.display = 'block';
+    loginBtn.style.display = 'none';
+    registerBtn.style.display = 'none';
+    logoutBtn.style.display = 'block';
+    updatePetsList();
+    updateAppointmentsList();
+  } else {
+    authForms.style.display = 'none';
+    dashboard.style.display = 'none';
+    loginBtn.style.display = 'block';
+    registerBtn.style.display = 'block';
+    logoutBtn.style.display = 'none';
+  }
+}
+
+function updatePetsList() {
+  if (!currentUser) return;
+  
+  const userPets = pets.filter(pet => pet.ownerId === currentUser.id);
+  
+  petsGrid.innerHTML = '';
+  petSelect.innerHTML = '<option value="">-- Selecione --</option>';
+  
+  userPets.forEach(pet => {
+    // Adicionar ao grid de pets
+    const petCard = document.createElement('div');
+    petCard.className = 'pet-card';
+    petCard.innerHTML = `
+      ${pet.imageUrl ? `<img src="${pet.imageUrl}" alt="${pet.name}">` : ''}
+      <h3>${pet.name}</h3>
+      <p>Espécie: ${pet.species}</p>
+      ${pet.breed ? `<p>Raça: ${pet.breed}</p>` : ''}
+      ${pet.age ? `<p>Idade: ${pet.age} anos</p>` : ''}
+    `;
+    petsGrid.appendChild(petCard);
+    
+    // Adicionar ao select de agendamento
+    const option = document.createElement('option');
+    option.value = pet.id;
+    option.textContent = pet.name;
+    petSelect.appendChild(option);
+  });
+}
+
+function updateAppointmentsList() {
+  if (!currentUser) return;
+  
+  const userAppointments = appointments.filter(app => app.userId === currentUser.id)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  
+  appointmentsList.innerHTML = '';
+  
+  if (userAppointments.length === 0) {
+    appointmentsList.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
+    return;
+  }
+  
+  userAppointments.forEach(app => {
+    const pet = pets.find(p => p.id === app.petId);
+    const appCard = document.createElement('div');
+    appCard.className = 'appointment-card';
+    appCard.innerHTML = `
+      <h3>${app.serviceType} para ${app.petName}</h3>
+      <p>Data: ${formatDateTime(app.date)}</p>
+      <p>Status: ${app.status}</p>
+      ${app.notes ? `<p>Observações: ${app.notes}</p>` : ''}
+    `;
+    appointmentsList.appendChild(appCard);
+  });
+}
+
+function logout() {
+  currentUser = null;
+  updateUI();
+}
+
+function showMessage(message, type) {
+  const messageElement = document.createElement('div');
+  messageElement.className = type;
+  messageElement.textContent = message;
+  
+  const container = document.querySelector('.container');
+  container.insertBefore(messageElement, container.firstChild);
+  
+  setTimeout(() => {
+    messageElement.remove();
+  }, 3000);
+}
+
+function formatDateTime(dateTimeString) {
+  const options = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  return new Date(dateTimeString).toLocaleDateString('pt-BR', options);
+}
+
+// Inicialização
+updateUI();
