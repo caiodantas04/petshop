@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetSchedule - Agendamento de Banho</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>PetSchedule</h1>
+      <div class="auth-buttons">
+        <button id="loginBtn">Login</button>
+        <button id="registerBtn">Registrar</button>
+        <button id="logoutBtn" style="display:none;">Sair</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="auth-forms" style="display:none;">
+        <!-- Formulário de Login -->
+        <div id="loginForm" class="form-container">
+          <h2>Login</h2>
+          <form>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Senha</label>
+              <input type="password" id="password" required>
+            </div>
+            <button type="submit">Entrar</button>
+            <button type="button" class="switch-form">Criar conta</button>
+          </form>
+        </div>
+
+        <!-- Formulário de Registro -->
+        <div id="registerForm" class="form-container" style="display:none;">
+          <h2>Criar Conta</h2>
+          <form>
+            <div class="form-group">
+              <label for="regName">Nome</label>
+              <input type="text" id="regName" required>
+            </div>
+            <div class="form-group">
+              <label for="regEmail">E-mail</label>
+              <input type="email" id="regEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="regPhone">Telefone</label>
+              <input type="tel" id="regPhone" required>
+            </div>
+            <div class="form-group">
+              <label for="regPassword">Senha</label>
+              <input type="password" id="regPassword" required>
+            </div>
+            <div class="form-group">
+              <label for="regConfirmPassword">Confirmar Senha</label>
+              <input type="password" id="regConfirmPassword" required>
+            </div>
+            <button type="submit">Registrar</button>
+            <button type="button" class="switch-form">Já tem conta? Login</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="dashboard" style="display:none;">
+        <section class="pets-section">
+          <h2>Meus Pets</h2>
+          <button id="addPetBtn">Adicionar Pet</button>
+          <div class="pets-grid" id="petsGrid">
+            <!-- Pets serão carregados aqui via JavaScript -->
+          </div>
+        </section>
+
+        <section class="schedule-section">
+          <h2>Agendar Banho</h2>
+          <form id="scheduleForm">
+            <div class="form-group">
+              <label for="petSelect">Selecione o Pet</label>
+              <select id="petSelect" required>
+                <option value="">-- Selecione --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="serviceType">Tipo de Serviço</label>
+              <select id="serviceType" required>
+                <option value="Banho">Banho</option>
+                <option value="Banho e Tosa">Banho e Tosa</option>
+                <option value="Tosa Higiênica">Tosa Higiênica</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="scheduleDate">Data e Hora</label>
+              <input type="datetime-local" id="scheduleDate" required>
+            </div>
+            <div class="form-group">
+              <label for="notes">Observações</label>
+              <textarea id="notes" rows="4"></textarea>
+            </div>
+            <button type="submit">Agendar</button>
+          </form>
+        </section>
+
+        <section class="appointments-section">
+          <h2>Meus Agendamentos</h2>
+          <div id="appointmentsList">
+            <!-- Agendamentos serão carregados aqui -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Modal para adicionar pet -->
+      <div id="petModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Adicionar Novo Pet</h2>
+          <form id="petForm">
+            <div class="form-group">
+              <label for="petName">Nome</label>
+              <input type="text" id="petName" required>
+            </div>
+            <div class="form-group">
+              <label for="petSpecies">Espécie</label>
+              <select id="petSpecies" required>
+                <option value="Cachorro">Cachorro</option>
+                <option value="Gato">Gato</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="petBreed">Raça</label>
+              <input type="text" id="petBreed">
+            </div>
+            <div class="form-group">
+              <label for="petAge">Idade (anos)</label>
+              <input type="number" id="petAge" min="0">
+            </div>
+            <div class="form-group">
+              <label for="petImage">Foto do Pet</label>
+              <input type="file" id="petImage" accept="image/*">
+            </div>
+            <button type="submit">Salvar</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
